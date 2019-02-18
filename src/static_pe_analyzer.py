@@ -332,7 +332,7 @@ def main():
                 print(':  [CAN NOT MAKE ANY PREDICTION]')
             elif is_unusual:
                 print(path_to_pe_file, ':  [UNUSUAL]  SCORE =', score)
-                unusual_files.append(path_to_pe_file)
+                unusual_files.append((path_to_pe_file, score))
                 scanned_files_n += 1
             else:
                 print(path_to_pe_file, ':  [CLEAR]  SCORE =', score)
@@ -343,8 +343,8 @@ def main():
 
     print('\n*********************************************************\n')
     print('UNUSUAL FILES:', len(unusual_files))
-    for unusual_file in unusual_files:
-        print(unusual_file)
+    for unusual_file, score in unusual_files:
+        print(unusual_file, ' SCORE =', score)
     print('\nTOTAL FILES SCANNED:', scanned_files_n)
 
 
