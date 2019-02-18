@@ -290,10 +290,8 @@ def get_prediction(path_to_pe_file, classifier):
     input_df = get_prepared_data(path_to_pe_file)
     if input_df is None:
         return (None, None)
-    prediction_ = classifier.predict(input_df)[0]
     score = classifier.decision_function(input_df)[0]
     prediction = True if score >= 0.0 else False
-    assert (prediction_ == 1.0 and score >= 0.0) or (prediction_ == 0.0 and score <= 0.0)
     return (prediction, score)
 
 
