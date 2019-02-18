@@ -3,10 +3,12 @@
 import os
 import sys
 import math
-import pefile
 import collections
 
-import malware_utils
+import pefile
+
+import pe_utils
+
 
 
 COMMON_SECTION_NAMES = {

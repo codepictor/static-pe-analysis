@@ -1,18 +1,14 @@
 import os
 import os.path
 import optparse
+
+import pefile
 import numpy as np
 import pandas as pd
 from sklearn.externals import joblib
 
-import pefile
-
 import collect_features
 
-
-# if a prediction probability for given PE file is greater than this value,
-# the PE file will be considered as malware
-MALWARE_THRESHOLD = 0.5
 
 
 # Don't change these values!
@@ -280,23 +276,25 @@ def get_prepared_data(path_to_pe_file):
 def get_prediction(path_to_pe_file, classifier):
     """Returns a prediction of the ML model for given PE file.
 
+    Returns a tuple containing one label of the class
+    (False -- clear, True -- unusual) and a score of given PE file.
+    Returns (None, None) if it is impossible to make any prediction.
+
     Args:
         path_to_pe_file (str): path to a PE file
         classifier: classifier for making predictions
     Returns:
-        float: a probability that given PE file is malware
-        None: the classifier can't make any prediction
+        prediction, score (tuple): label of the class (0.0 or 1.0)
+                                   and score of given PE file
     """
     input_df = get_prepared_data(path_to_pe_file)
     if input_df is None:
-        return None
-    prediction = classifier.predict(input_df)[0]
-    malware_probability = classifier.predict_proba(input_df)[0][1]
-    print('  !!! DEBUG', path_to_pe_file, ': ',
-            'malware_probability =', malware_probability,
-            'malware_log_probability =', classifier.predict_log_proba(input_df),
-            'decision_function =', classifier.decision_function(input_df))
-    return malware_probability
+        return (None, None)
+    prediction_ = classifier.predict(input_df)[0]
+    score = classifier.decision_function(input_df)[0]
+    prediction = True if score >= 0.0 else False
+    assert (prediction_ == 1.0 and score >= 0.0) or (prediction_ == 0.0 and score <= 0.0)
+    return (prediction, score)
 
 
 def get_classifier():
@@ -323,34 +321,33 @@ def main():
     opts, args = parser.parse_args()
 
     classifier = get_classifier()
-    malwares = []
+    unusual_files = []
     scanned_files_n = 0
-    temp = []
 
     if len(args) == 1:
         paths_to_pe_files = get_paths_to_pe_files(args[0])
         for path_to_pe_file in paths_to_pe_files:
             prediction = get_prediction(path_to_pe_file, classifier)
-            if prediction is None:
+            is_unusual = prediction[0]
+            score = prediction[1]
+            if is_unusual is None:
                 print(':  [CAN NOT MAKE ANY PREDICTION]')
-            elif prediction > MALWARE_THRESHOLD:
-                print(path_to_pe_file, ':  [SUSPICIOUS]')
-                malwares.append(path_to_pe_file)
+            elif is_unusual:
+                print(path_to_pe_file, ':  [UNUSUAL]  SCORE =', score)
+                unusual_files.append(path_to_pe_file)
                 scanned_files_n += 1
-                temp.append(prediction)
             else:
-                print(path_to_pe_file, ':  [CLEAR]')
+                print(path_to_pe_file, ':  [CLEAR]  SCORE =', score)
                 scanned_files_n += 1
     else:
         print('Incorrect number of arguments:', len(args))
         print('Only one argument (path to a PE file or dir) must be present.')
 
     print('\n*********************************************************\n')
-    print('SUSPICIOUS FILES:', len(malwares))
-    for malware in malwares:
-        print(malware)
+    print('UNUSUAL FILES:', len(unusual_files))
+    for unusual_file in unusual_files:
+        print(unusual_file)
     print('\nTOTAL FILES SCANNED:', scanned_files_n)
-    print('  temp:', temp)
 
 
 if __name__ == '__main__':

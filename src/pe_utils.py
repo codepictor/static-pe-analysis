@@ -1,7 +1,9 @@
 import os
 import hashlib
 import subprocess
+
 import pefile
+
 
 
 def read_file_in_chunks(fh, chunk_size=8192):
