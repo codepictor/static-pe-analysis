@@ -1,8 +1,6 @@
-## How to deploy it:
+# static-pe-analysis
 
-First of all, you should have ```python 3.x``` and ```git``` in your PATH variable to work with this project.
-
-*Note for Windows users*: You should start a command line with administrator's privileges. 
+### Setting up the environment
 
 Clone the repository:
 
