@@ -1,5 +1,7 @@
 # static-pe-analysis
 
+Static analysis of PE files
+
 ### Setting up the environment
 
 Clone the repository:
