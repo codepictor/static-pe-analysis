@@ -1,6 +1,8 @@
 # static-pe-analysis
 
-Static analysis of PE files
+Static analysis of PE files.
+
+*Note: Python 3.6.2 is recommended.*
 
 ### Setting up the environment
 
@@ -12,16 +14,16 @@ Clone the repository:
 Create a new virtual environment:
 
     # on Linux:
-    python3 -m venv peenv
+    python3 -m venv venv
     # on Windows:
-    python -m venv peenv
+    python -m venv venv
 
 Activate the environment:
 
     # on Linux:
-    source peenv/bin/activate
+    source venv/bin/activate
     # on Windows:
-    call peenv\Scripts\activate.bat
+    call venv\Scripts\activate.bat
 
 Install required dependencies:
 
