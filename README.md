@@ -2,7 +2,7 @@
 
 Static analysis of PE files.
 
-*Note: Python 3.6.2 is recommended.*
+*Note: Python 3.6 is required.*
 
 ### Setting up the environment
 
@@ -14,7 +14,7 @@ Clone the repository:
 Create a new virtual environment:
 
     # on Linux:
-    python3 -m venv venv
+    python3.6 -m venv venv
     # on Windows:
     python -m venv venv
 
@@ -34,8 +34,4 @@ Install required dependencies:
 
 Finally, run *src/main.py*:
 
-    # on Linux:
-    python3 src/static_pe_analyzer.py <path to a single PE file or a folder>
-    # on Windows:
-    python src\static_pe_analyzer.py <path to a single PE file or a folder>
-
+    fbs run
