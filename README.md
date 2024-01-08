@@ -32,6 +32,6 @@ Install required dependencies:
     # on Windows:
     python -m pip install --upgrade pip -r requirements.txt
 
-Finally, run *src/main.py*:
+Finally, run the following:
 
     fbs run
