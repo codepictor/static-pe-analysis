@@ -1,13 +1,17 @@
 import os
 import os.path
 
-from PySide2.QtCore import QThread
-from PySide2.QtGui import QTextCursor, Qt, QFontMetrics
+from PySide2.QtCore import QThread, QSize
+from PySide2.QtGui import QTextCursor, Qt
 from PySide2.QtWidgets import (
     QMainWindow,
     QFileDialog,
     QMessageBox,
     QTableWidgetItem,
+    QWidget,
+    QLabel,
+    QHBoxLayout,
+    QAbstractItemView,
     QApplication,
     QStyle
 )
@@ -62,6 +66,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.tableWidget_Results.setColumnWidth(0, 500)
         self.tableWidget_Results.setColumnWidth(1, 100)
         self.tableWidget_Results.setColumnWidth(2, 100)
+        self.tableWidget_Results.setEditTriggers(
+            QAbstractItemView.NoEditTriggers
+        )
 
         # header_view = QHeaderView(Qt.Horizontal, self.ui.tableWidget_Results)
         # header_view.setSectionResizeMode(0, QHeaderView.ResizeToContents)
@@ -133,6 +140,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         self.tableWidget_Results.clearContents()
         self.tableWidget_Results.setRowCount(0)
+        self.tableWidget_Results.setSortingEnabled(False)
 
         self.plainTextEdit_Results.clear()
         self.plainTextEdit_Results.insertPlainText('Starting...\n')
@@ -187,6 +195,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.pushButton_RunModel.setEnabled(True)
         self.pushButton_StopModel.setEnabled(False)
 
+        self.tableWidget_Results.setSortingEnabled(True)
+
         self.plainTextEdit_Results.insertPlainText('Done.\n')
         self.plainTextEdit_Results.moveCursor(QTextCursor.End)
         self.statusbar.showMessage('Done')
@@ -206,15 +216,19 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.tableWidget_Results.setItem(
             row_idx, 0, QTableWidgetItem(path_to_pe_file)
         )
-        icon_item = self.get_icon_item(predicted_label)
-        self.tableWidget_Results.setItem(
-            row_idx, 1, icon_item
-        )
+
+        # icon_item = self.get_icon_item(predicted_label)
+        # self.tableWidget_Results.setItem(
+        #     row_idx, 1, icon_item
+        # )
+        self.set_table_icon(row_idx, predicted_label)
+
         score_item = QTableWidgetItem(predicted_score_str)
         score_item.setTextAlignment(Qt.AlignCenter)
         self.tableWidget_Results.setItem(
             row_idx, 2, score_item
         )
+
         self.tableWidget_Results.setItem(
             row_idx, 3, QTableWidgetItem(exception_text)
         )
@@ -236,24 +250,58 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.plainTextEdit_Results.moveCursor(QTextCursor.End)
         self.statusbar.showMessage(log_row)
 
-    def get_icon_item(self, predicted_label):
+    # def get_icon_item(self, predicted_label):
+    #     """"""
+    #     icon_item = QTableWidgetItem()
+    #     icon_item.setTextAlignment(Qt.AlignCenter)
+    #
+    #     if predicted_label is None:
+    #         icon_item.setIcon(self.ctx.img_no_result)
+    #         return icon_item
+    #
+    #     if predicted_label:
+    #         # icon_item.setIcon(self.ctx.img_warning)
+    #         icon_item.setIcon(
+    #             self.style().standardIcon(QStyle.SP_MessageBoxWarning)
+    #         )
+    #     else:
+    #         icon_item.setIcon(self.ctx.img_ok)
+    #
+    #     return icon_item
+
+    def get_table_icon(self, predicted_label):
         """"""
-        icon_item = QTableWidgetItem()
-        icon_item.setTextAlignment(Qt.AlignCenter)
+        assert predicted_label is None or predicted_label in [True, False]
 
         if predicted_label is None:
-            icon_item.setIcon(self.ctx.img_no_result)
-            return icon_item
+            return self.ctx.img_no_result
 
         if predicted_label:
-            # icon_item.setIcon(self.ctx.img_warning)
-            icon_item.setIcon(
-                self.style().standardIcon(QStyle.SP_MessageBoxWarning)
-            )
-        else:
-            icon_item.setIcon(self.ctx.img_ok)
+            return self.style().standardIcon(QStyle.SP_MessageBoxWarning)
 
-        return icon_item
+        return self.ctx.img_ok
+
+    def set_table_icon(self, row_idx, predicted_label):
+        """"""
+        assert row_idx >= 0
+        assert predicted_label is None or predicted_label in [True, False]
+
+        icon = self.get_table_icon(predicted_label)
+        icon_size = QSize(16, 16)
+
+        icon_label = QLabel()
+        icon_label.setMaximumSize(icon_size)
+        icon_label.setScaledContents(True)
+        icon_label.setPixmap(icon.pixmap(icon_size))
+
+        icon_widget = QWidget()
+        icon_layout = QHBoxLayout(icon_widget)
+        icon_layout.addWidget(icon_label)
+        icon_layout.setAlignment(Qt.AlignCenter)
+        icon_layout.setContentsMargins(0, 0, 0, 0)
+        icon_widget.setLayout(icon_layout)
+
+        self.tableWidget_Results.setCellWidget(row_idx, 1, icon_widget)
 
     def closeEvent(self, event):
         """"""
