@@ -286,7 +286,7 @@
   </action>
   <action name="action_OpenDir">
    <property name="text">
-    <string>Open dirictory...</string>
+    <string>Open directory...</string>
    </property>
   </action>
   <action name="action_Quit">

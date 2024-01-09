@@ -251,7 +251,7 @@ def get_prediction(path_to_pe_file, classifier):
         classifier: classifier for making predictions
     Returns:
         prediction (dict): path to a PE-file (str)
-                           label of the class (bool),
+                           predicted label (bool),
                            decision function value (float),
                            note (str)
     """
@@ -274,7 +274,7 @@ def get_prediction(path_to_pe_file, classifier):
         'label': True if score >= 0.0 else False,
         # 'proba': proba,
         'score': float(score),
-        'note': 'The model has been successfully applied.'
+        'note': 'The model was successfully applied.'
     }
 
 

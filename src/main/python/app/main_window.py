@@ -230,7 +230,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.plainTextEdit_Results.moveCursor(QTextCursor.End)
 
         self.plainTextEdit_Results.insertPlainText(
-            'FILES WITHOUT ANY PREDICTION: {}\n'.format(
+            'FILES WITHOUT PREDICTION: {}\n'.format(
                 self._unpredicted_files_n
             )
         )
@@ -277,7 +277,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 self._positive_predictions.append(prediction)
         else:
             self._unpredicted_files_n += 1
-        self._scanned_files_n = row_idx
+        self._scanned_files_n += 1
 
         self.tableWidget_Results.insertRow(row_idx)
 
@@ -304,7 +304,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             row_idx, 3, QTableWidgetItem(prediction['note'])
         )
 
-        log_row = prediction['path_to_file'] + ' : '
+        log_row = prediction['path_to_file'] + ': '
         if prediction['label'] is None:
             log_row += 'NO PREDICTION'
         else:
@@ -315,7 +315,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             assert prediction['score'] is not None
             log_row += '; SCORE = {:.2f}'.format(prediction['score'])
 
-        log_row += '; ' + 'NOTE: ' + prediction['note'] + '\n'
+        log_row += '; NOTE: ' + prediction['note'] + '\n'
 
         self.plainTextEdit_Results.insertPlainText(log_row)
         self.plainTextEdit_Results.moveCursor(QTextCursor.End)

@@ -1,4 +1,4 @@
-from pathlib import Path
+# from pathlib import Path
 
 from PySide2.QtGui import QIcon
 from sklearn.externals import joblib

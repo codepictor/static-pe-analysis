@@ -120,7 +120,7 @@ class Worker(QObject):
                     {
                         'path_to_file': path_to_pe_file,
                         'label': None,
-                        'proba': None,
+                        # 'proba': None,
                         'score': None,
                         'note': str(e)
                     }
