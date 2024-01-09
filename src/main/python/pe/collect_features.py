@@ -129,9 +129,9 @@ def get_entropy(b_data):
     if len(b_data) == 0:
         return 0.0
 
-    occurences = collections.Counter(b_data)
+    occurrences = collections.Counter(b_data)
     entropy = 0
-    for x in occurences.values():
+    for x in occurrences.values():
         p_x = float(x)/len(b_data)
         entropy -= p_x*math.log(p_x, 2)
     return entropy
@@ -440,7 +440,7 @@ class PEInfo(object):
         )
         features['SECTIONS/average_section_entropy'] = (
             0.0 if not self._pef.sections
-                else average_section_entropy/len(self._pef.sections)
+            else average_section_entropy/len(self._pef.sections)
         )
         return features
 
@@ -449,8 +449,8 @@ class PEInfo(object):
         features = {}
         methods = [func for func in dir(self) if callable(getattr(self, func))]
         methods = filter(
-            lambda method:
-            not method.startswith('_') and method != 'get_features',
+            lambda cls_method:
+            not cls_method.startswith('_') and cls_method != 'get_features',
             methods
         )
         for method_name in methods:

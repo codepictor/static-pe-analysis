@@ -1,8 +1,8 @@
-import os
+# import os
 import hashlib
 # import subprocess
 
-import pefile
+# import pefile
 
 
 DOS_HEADER_SIZE = 64
@@ -65,19 +65,19 @@ def is_pe_file(filepath):
 #     return exit_code
 
 
-def check_signature_existence(pe_file_path):
-    pe = pefile.PE(pe_file_path, fast_load=True)
-    sec_dir = pe.OPTIONAL_HEADER.DATA_DIRECTORY[
-        pefile.DIRECTORY_ENTRY['IMAGE_DIRECTORY_ENTRY_SECURITY']
-    ]
-    address = sec_dir.VirtualAddress
-    # size = sec_dir.Size
-    pe.close()
-
-    if address == 0:
-        return False
-    else:
-        return True
+# def check_signature_existence(pe_file_path):
+#     pe = pefile.PE(pe_file_path, fast_load=True)
+#     sec_dir = pe.OPTIONAL_HEADER.DATA_DIRECTORY[
+#         pefile.DIRECTORY_ENTRY['IMAGE_DIRECTORY_ENTRY_SECURITY']
+#     ]
+#     address = sec_dir.VirtualAddress
+#     # size = sec_dir.Size
+#     pe.close()
+#
+#     if address == 0:
+#         return False
+#     else:
+#         return True
 
 
 # def iget_path_to_pe_file(folder):

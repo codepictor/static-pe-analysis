@@ -1,14 +1,13 @@
 import os
 import os.path
-import optparse
 
 import pefile
 import numpy as np
 import pandas as pd
 from sklearn.externals import joblib
 
-from pe import collect_features
-from pe import pe_utils
+from . import collect_features
+from . import pe_utils
 
 
 # Don't change these values!
@@ -191,53 +190,53 @@ def get_paths_to_pe_files(path):
 
     This function is auxiliary. It detects whether given path is a path
     to a single PE file or a directory with a lot of PE files
-    (or maybe with subdirectories containing PE files and subdirectories).
+    (or maybe with subdirectories containing PE files).
 
     Args:
-        path (str): path to a single PE file or a directory containing PE files
+        path (str): path to a single PE file
+                    or a directory containing PE files
     Returns:
         list: paths to PE files
     """
     if os.path.isfile(path) and pe_utils.is_pe_file(path):
         yield path
     elif os.path.isdir(path):
-        print('Recursive analyzing files in \'{0}\' ...'.format(path))
-        print('All files except for exe-files will be skipped.\n')
-        print('*********************************************************\n')
         for root, dirs, files in os.walk(path):
             for filename in files:
                 path_to_file = os.path.join(root, filename)
                 if pe_utils.is_pe_file(path_to_file):
                     yield path_to_file
     else:
-        print(path, 'must be path to a PE file or directory with PE files.')
+        pass
 
 
 def get_prepared_data(path_to_pe_file):
-    """Returns a dataframe which the classifier needs.
+    """Returns features of the given PE file.
 
-    This function parses given PE file, filters features (removing features
-    which the classifier doesn't need) and constructs a pandas dataframe
-    as input to the classifier.
+    Returns a dataframe which the classifier needs
+    as the first return value and some additional features
+    as the second return value.
 
     Args:
         path_to_pe_file (str): path to a PE file
     Returns:
         pandas.DataFrame: prepared data for the classifier
-        None: given PE file is not an exe-file, or it can't be parsed
+        dict: all raw features
     """
     pe = pefile.PE(path_to_pe_file)
 
-    all_features = collect_features.get_features(pe)
+    all_raw_features = collect_features.get_features(pe)
     filtered_features = dict()
-    for feature_name in all_features.keys():
+    for feature_name in all_raw_features.keys():
         if feature_name in REQUIRED_FEATURES:
-            filtered_features[feature_name] = float(all_features[feature_name])
+            filtered_features[feature_name] = float(
+                all_raw_features[feature_name]
+            )
 
     df = pd.DataFrame([filtered_features,])
     for i in range(len(df.columns)):
         df.iat[0, i] = (df.iat[0, i] - MEANS[i]) / (np.sqrt(VARIATIONS[i]))
-    return df
+    return df, all_raw_features
 
 
 def get_prediction(path_to_pe_file, classifier):
@@ -251,70 +250,54 @@ def get_prediction(path_to_pe_file, classifier):
         path_to_pe_file (str): path to a PE file
         classifier: classifier for making predictions
     Returns:
-        prediction, score (tuple): label of the class (0.0 or 1.0)
-                                   and score of given PE file
+        prediction (dict): label of the class (0.0 or 1.0),
+                           score (from -inf to +inf),
+                           note (str)
     """
-    input_df = get_prepared_data(path_to_pe_file)
+    input_df, all_raw_features = get_prepared_data(path_to_pe_file)
+    assert len(input_df.shape) == 2 and input_df.shape[0] == 1
+
+    if all_raw_features['is_exe'] < 0.5:
+        return {
+            'path_to_file': path_to_pe_file,
+            'label': None,
+            # 'proba': None,
+            'score': None,
+            'note': 'Now only .exe files are supported.'
+        }
+
     score = classifier.decision_function(input_df)[0]
-    prediction = True if score >= 0.0 else False
-    return prediction, score
+    # proba = classifier.predict_proba(input_df)[0, 1]
+    return {
+        'path_to_file': path_to_pe_file,
+        'label': True if score >= 0.0 else False,
+        # 'proba': proba,
+        'score': float(score),
+        'note': 'The model has been successfully applied.'
+    }
 
 
 def get_classifier():
-    """Returns a classifier for predictions.
+    """Returns a fitted classifier for predictions.
 
-    Constructs an absolute path to the classifier
-    (../results/boosting/boosting_classifier.pkl),
+    Constructs an absolute path to the classifier,
     loads it from the disk and returns it.
     """
     path_to_this_file = os.path.abspath(os.path.dirname(__file__))
+    # path_to_classifier = os.path.join(
+    #     path_to_this_file,
+    #     '..',
+    #     'results',
+    #     'boosting',
+    #     'boosting_classifier.pkl'
+    # )
     path_to_classifier = os.path.join(
         path_to_this_file,
-        '..',
-        'results',
-        'boosting',
+        '..', '..',
+        'resources',
+        'base',
+        'model',
         'boosting_classifier.pkl'
     )
     classifier = joblib.load(path_to_classifier)
     return classifier
-
-
-def main():
-    parser = optparse.OptionParser()
-    opts, args = parser.parse_args()
-
-    classifier = get_classifier()
-    unusual_files = []
-    scanned_files_n = 0
-
-    if len(args) == 1:
-        paths_to_pe_files = get_paths_to_pe_files(args[0])
-        for path_to_pe_file in paths_to_pe_files:
-            try:
-                prediction = get_prediction(path_to_pe_file, classifier)
-                is_unusual = prediction[0]
-                score = prediction[1]
-                if is_unusual is None:
-                    print(path_to_pe_file, ':  [CAN NOT MAKE ANY PREDICTION]')
-                elif is_unusual:
-                    print(path_to_pe_file, ':  [UNUSUAL]  SCORE =', score)
-                    unusual_files.append((path_to_pe_file, score))
-                    scanned_files_n += 1
-                else:
-                    print(path_to_pe_file, ':  [CLEAR]  SCORE =', score)
-                    scanned_files_n += 1
-            except Exception as e:
-                print(path_to_pe_file, ':  [', str(e), ']')
-    else:
-        print('Incorrect number of arguments:', len(args))
-        print('Only one argument (path to a PE file or a dir) should be provided.')
-
-    print('\n*********************************************************\n')
-    print('UNUSUAL FILES:', len(unusual_files))
-    for unusual_file, score in unusual_files:
-        print(unusual_file, ' SCORE =', score)
-    print('\nTOTAL FILES SCANNED:', scanned_files_n)
-
-
-if __name__ == '__main__':
-    main()
