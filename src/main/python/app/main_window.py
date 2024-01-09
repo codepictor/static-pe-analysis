@@ -396,7 +396,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         msg += (
             'This tool is designed to search for potentially malicious '
-            'code inside PE-files (.exe and .dll are supported) '
+            'code inside PE-files (now only .exe is supported) '
             'with the help of static ML analysis. '
             'The word "static" means that these files are not run, '
             'so the code inside these PE-files will not be executed. '
@@ -412,7 +412,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             'We appreciate your interest in our software. '
             'While we strive to provide a reliable and effective tool, '
             'we want to emphasize that the use of this software is at your own risk. '
-            'The authors of the software cannot be held responsible '
+            'The authors of the software cannot be responsible '
             'for any outcomes or consequences resulting from its use.\n\n'
         )
 
