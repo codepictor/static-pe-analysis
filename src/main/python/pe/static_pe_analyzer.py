@@ -250,8 +250,9 @@ def get_prediction(path_to_pe_file, classifier):
         path_to_pe_file (str): path to a PE file
         classifier: classifier for making predictions
     Returns:
-        prediction (dict): label of the class (0.0 or 1.0),
-                           score (from -inf to +inf),
+        prediction (dict): path to a PE-file (str)
+                           label of the class (bool),
+                           decision function value (float),
                            note (str)
     """
     input_df, all_raw_features = get_prepared_data(path_to_pe_file)

@@ -1,4 +1,4 @@
-import multiprocessing
+# import multiprocessing
 
 from PySide2.QtCore import QObject, QThread, Signal
 
@@ -63,34 +63,34 @@ from pe import static_pe_analyzer
 #     return predicted_label, predicted_score
 
 
-def _get_predictions(paths_to_pe_files, clf, queue_in, queue_out):
-    assert clf is not None
-
-    for path_to_pe_file in paths_to_pe_files:
-        if not queue_in.empty():
-            msg = queue_in.get()
-            assert msg is None and queue_in.empty()
-            queue_out.put(None)
-            return
-
-        try:
-            prediction = static_pe_analyzer.get_prediction(
-                path_to_pe_file, clf
-            )
-            res = path_to_pe_file, prediction[0], prediction[1], ''
-            queue_out.put(res)
-        except Exception as e:
-            res = path_to_pe_file, None, None, str(e)
-            queue_out.put(res)
-
-    queue_out.put(None)
+# def _get_predictions(paths_to_pe_files, clf, queue_in, queue_out):
+#     assert clf is not None
+#
+#     for path_to_pe_file in paths_to_pe_files:
+#         if not queue_in.empty():
+#             msg = queue_in.get()
+#             assert msg is None and queue_in.empty()
+#             queue_out.put(None)
+#             return
+#
+#         try:
+#             prediction = static_pe_analyzer.get_prediction(
+#                 path_to_pe_file, clf
+#             )
+#             res = path_to_pe_file, prediction[0], prediction[1], ''
+#             queue_out.put(res)
+#         except Exception as e:
+#             res = path_to_pe_file, None, None, str(e)
+#             queue_out.put(res)
+#
+#     queue_out.put(None)
 
 
 class Worker(QObject):
     """"""
 
-    # pe_file_idx, path_to_pe_file, predicted_label, predicted_score, note
-    progress = Signal(int, str, bool, float, str)
+    # pe_file_idx, prediction
+    progress = Signal(int, dict)
     finished = Signal()
 
     def __init__(self, paths_to_pe_files, clf):
@@ -99,58 +99,63 @@ class Worker(QObject):
         self.paths_to_pe_files = paths_to_pe_files
         self.clf = clf
 
-    # def _run(self):
-    #     """"""
-    #     row_idx = 0
-    #
-    #     for path_to_pe_file in self.paths_to_pe_files:
-    #         if QThread.currentThread().isInterruptionRequested():
-    #             self.finished.emit()
-    #             return
-    #
-    #         try:
-    #             prediction = static_pe_analyzer.get_prediction(
-    #                 path_to_pe_file, self.clf
-    #             )
-    #         except Exception as e:
-    #             self.progress.emit(
-    #                 row_idx, path_to_pe_file, None, None, str(e)
-    #             )
-    #
-    #         assert len(prediction) == 2
-    #         self.progress.emit(
-    #             row_idx, path_to_pe_file, prediction[0], prediction[1], ''
-    #         )
-    #         row_idx += 1
-    #
-    #     self.finished.emit()
-
     def run(self):
+        """"""
         row_idx = 0
 
-        q_in = multiprocessing.Queue()
-        q_out = multiprocessing.Queue()
-
-        p = multiprocessing.Process(
-            target=_get_predictions,
-            args=(self.paths_to_pe_files, self.clf, q_in, q_out)
-        )
-        p.start()
-
-        while not QThread.currentThread().isInterruptionRequested():
-            res = q_out.get()
-
-            if res is None:
-                p.join()
+        for path_to_pe_file in self.paths_to_pe_files:
+            if QThread.currentThread().isInterruptionRequested():
                 self.finished.emit()
                 return
 
-            assert len(res) == 4
-            # print('#####', res)
-            self.progress.emit(row_idx, res[0], res[1], res[2], res[3])
+            try:
+                prediction = static_pe_analyzer.get_prediction(
+                    path_to_pe_file, self.clf
+                )
+                assert len(prediction) == 4
+                self.progress.emit(row_idx, prediction)
+            except Exception as e:
+                self.progress.emit(
+                    row_idx,
+                    {
+                        'path_to_file': path_to_pe_file,
+                        'label': None,
+                        'proba': None,
+                        'score': None,
+                        'note': str(e)
+                    }
+                )
+
             row_idx += 1
 
-        q_in.put(None)
-        p.join()
-        # print('Subprocess finished!')
         self.finished.emit()
+
+    # def _run(self):
+    #     row_idx = 0
+    #
+    #     q_in = multiprocessing.Queue()
+    #     q_out = multiprocessing.Queue()
+    #
+    #     p = multiprocessing.Process(
+    #         target=_get_predictions,
+    #         args=(self.paths_to_pe_files, self.clf, q_in, q_out)
+    #     )
+    #     p.start()
+    #
+    #     while not QThread.currentThread().isInterruptionRequested():
+    #         res = q_out.get()
+    #
+    #         if res is None:
+    #             p.join()
+    #             self.finished.emit()
+    #             return
+    #
+    #         assert len(res) == 4
+    #         # print('#####', res)
+    #         self.progress.emit(row_idx, res[0], res[1], res[2], res[3])
+    #         row_idx += 1
+    #
+    #     q_in.put(None)
+    #     p.join()
+    #     # print('Subprocess finished!')
+    #     self.finished.emit()
