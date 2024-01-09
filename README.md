@@ -13,10 +13,7 @@ Clone the repository:
 
 Create a new virtual environment:
 
-    # on Linux:
-    python3.6 -m venv venv
-    # on Windows:
-    python -m venv venv
+    <path to python3.6> -m venv venv
 
 Activate the environment:
 
@@ -27,10 +24,7 @@ Activate the environment:
 
 Install required dependencies:
 
-    # on Linux:
     pip install --upgrade pip -r requirements.txt
-    # on Windows:
-    python -m pip install --upgrade pip -r requirements.txt
 
 Finally, run the following:
 
