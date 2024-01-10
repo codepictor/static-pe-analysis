@@ -104,8 +104,9 @@ venv.bak/
 .mypy_cache/
 
 # virtual environment
-peenv/
+# venv/
 
 # ignore IDE files
 .idea/
 
+!src/build

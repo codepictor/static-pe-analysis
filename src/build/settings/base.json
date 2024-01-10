@@ -1,0 +1,14 @@
+{
+    "app_name": "Static-PE-Analyzer",
+    "author": "Unknown",
+    "main_module": "src/main/python/main.py",
+    "version": "1.0.0",
+
+    "hidden_imports": [
+        "sklearn.ensemble",
+        "sklearn.neighbors",
+        "sklearn.neighbors.typedefs",
+        "sklearn.neighbors.quad_tree",
+        "sklearn.tree._utils"
+    ]
+}
