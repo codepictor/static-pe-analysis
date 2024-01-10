@@ -17,8 +17,8 @@ class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         if not MainWindow.objectName():
             MainWindow.setObjectName(u"MainWindow")
-        MainWindow.resize(800, 600)
-        MainWindow.setMinimumSize(QSize(800, 600))
+        MainWindow.resize(1024, 600)
+        MainWindow.setMinimumSize(QSize(1024, 600))
         self.action_OpenFile = QAction(MainWindow)
         self.action_OpenFile.setObjectName(u"action_OpenFile")
         self.action_OpenDir = QAction(MainWindow)
@@ -41,13 +41,15 @@ class Ui_MainWindow(object):
 
         self.pushButton_OpenFile = QPushButton(self.centralwidget)
         self.pushButton_OpenFile.setObjectName(u"pushButton_OpenFile")
-        self.pushButton_OpenFile.setMaximumSize(QSize(180, 16777215))
+        self.pushButton_OpenFile.setMinimumSize(QSize(300, 0))
+        self.pushButton_OpenFile.setMaximumSize(QSize(300, 16777215))
 
         self.horizontalLayout_2.addWidget(self.pushButton_OpenFile)
 
         self.pushButton_OpenDir = QPushButton(self.centralwidget)
         self.pushButton_OpenDir.setObjectName(u"pushButton_OpenDir")
-        self.pushButton_OpenDir.setMaximumSize(QSize(180, 16777215))
+        self.pushButton_OpenDir.setMinimumSize(QSize(300, 0))
+        self.pushButton_OpenDir.setMaximumSize(QSize(300, 16777215))
         self.pushButton_OpenDir.setCheckable(False)
         self.pushButton_OpenDir.setChecked(False)
 
@@ -60,26 +62,28 @@ class Ui_MainWindow(object):
         self.horizontalLayout_4.setObjectName(u"horizontalLayout_4")
         self.label_Selected = QLabel(self.centralwidget)
         self.label_Selected.setObjectName(u"label_Selected")
-        self.label_Selected.setMaximumSize(QSize(100, 16777215))
+        self.label_Selected.setMinimumSize(QSize(100, 0))
+        self.label_Selected.setMaximumSize(QSize(16777215, 16777215))
 
         self.horizontalLayout_4.addWidget(self.label_Selected)
 
         self.label_Path = QLabel(self.centralwidget)
         self.label_Path.setObjectName(u"label_Path")
+        self.label_Path.setMinimumSize(QSize(90, 0))
 
         self.horizontalLayout_4.addWidget(self.label_Path)
 
         self.pushButton_RunModel = QPushButton(self.centralwidget)
         self.pushButton_RunModel.setObjectName(u"pushButton_RunModel")
-        self.pushButton_RunModel.setMinimumSize(QSize(180, 0))
-        self.pushButton_RunModel.setMaximumSize(QSize(180, 16777215))
+        self.pushButton_RunModel.setMinimumSize(QSize(300, 0))
+        self.pushButton_RunModel.setMaximumSize(QSize(300, 16777215))
 
         self.horizontalLayout_4.addWidget(self.pushButton_RunModel)
 
         self.pushButton_StopModel = QPushButton(self.centralwidget)
         self.pushButton_StopModel.setObjectName(u"pushButton_StopModel")
-        self.pushButton_StopModel.setMinimumSize(QSize(180, 0))
-        self.pushButton_StopModel.setMaximumSize(QSize(180, 16777215))
+        self.pushButton_StopModel.setMinimumSize(QSize(300, 0))
+        self.pushButton_StopModel.setMaximumSize(QSize(300, 16777215))
 
         self.horizontalLayout_4.addWidget(self.pushButton_StopModel)
 
@@ -97,7 +101,8 @@ class Ui_MainWindow(object):
         self.horizontalLayout_5.setObjectName(u"horizontalLayout_5")
         self.label_FinalReport = QLabel(self.centralwidget)
         self.label_FinalReport.setObjectName(u"label_FinalReport")
-        self.label_FinalReport.setMaximumSize(QSize(90, 16777215))
+        self.label_FinalReport.setMinimumSize(QSize(200, 0))
+        self.label_FinalReport.setMaximumSize(QSize(16777215, 16777215))
 
         self.horizontalLayout_5.addWidget(self.label_FinalReport)
 
@@ -153,7 +158,7 @@ class Ui_MainWindow(object):
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QMenuBar(MainWindow)
         self.menubar.setObjectName(u"menubar")
-        self.menubar.setGeometry(QRect(0, 0, 800, 22))
+        self.menubar.setGeometry(QRect(0, 0, 1024, 22))
         self.menuFile = QMenu(self.menubar)
         self.menuFile.setObjectName(u"menuFile")
         self.menuHelp = QMenu(self.menubar)
@@ -179,7 +184,7 @@ class Ui_MainWindow(object):
     def retranslateUi(self, MainWindow):
         MainWindow.setWindowTitle(QCoreApplication.translate("MainWindow", u"MainWindow", None))
         self.action_OpenFile.setText(QCoreApplication.translate("MainWindow", u"Open file...", None))
-        self.action_OpenDir.setText(QCoreApplication.translate("MainWindow", u"Open dirictory...", None))
+        self.action_OpenDir.setText(QCoreApplication.translate("MainWindow", u"Open directory...", None))
         self.action_Quit.setText(QCoreApplication.translate("MainWindow", u"Quit", None))
         self.action_About.setText(QCoreApplication.translate("MainWindow", u"About Static PE Analyzer", None))
         self.label_Info.setText(QCoreApplication.translate("MainWindow", u"Open a file (.exe or .dll) or a directory...", None))

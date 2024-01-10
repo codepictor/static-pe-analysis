@@ -6,13 +6,13 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>800</width>
+    <width>1024</width>
     <height>600</height>
    </rect>
   </property>
   <property name="minimumSize">
    <size>
-    <width>800</width>
+    <width>1024</width>
     <height>600</height>
    </size>
   </property>
@@ -35,9 +35,15 @@
       </item>
       <item>
        <widget class="QPushButton" name="pushButton_OpenFile">
+        <property name="minimumSize">
+         <size>
+          <width>300</width>
+          <height>0</height>
+         </size>
+        </property>
         <property name="maximumSize">
          <size>
-          <width>180</width>
+          <width>300</width>
           <height>16777215</height>
          </size>
         </property>
@@ -48,9 +54,15 @@
       </item>
       <item>
        <widget class="QPushButton" name="pushButton_OpenDir">
+        <property name="minimumSize">
+         <size>
+          <width>300</width>
+          <height>0</height>
+         </size>
+        </property>
         <property name="maximumSize">
          <size>
-          <width>180</width>
+          <width>300</width>
           <height>16777215</height>
          </size>
         </property>
@@ -71,9 +83,15 @@
      <layout class="QHBoxLayout" name="horizontalLayout_4">
       <item>
        <widget class="QLabel" name="label_Selected">
-        <property name="maximumSize">
+        <property name="minimumSize">
          <size>
           <width>100</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
           <height>16777215</height>
          </size>
         </property>
@@ -84,6 +102,12 @@
       </item>
       <item>
        <widget class="QLabel" name="label_Path">
+        <property name="minimumSize">
+         <size>
+          <width>90</width>
+          <height>0</height>
+         </size>
+        </property>
         <property name="text">
          <string/>
         </property>
@@ -93,13 +117,13 @@
        <widget class="QPushButton" name="pushButton_RunModel">
         <property name="minimumSize">
          <size>
-          <width>180</width>
+          <width>300</width>
           <height>0</height>
          </size>
         </property>
         <property name="maximumSize">
          <size>
-          <width>180</width>
+          <width>300</width>
           <height>16777215</height>
          </size>
         </property>
@@ -112,13 +136,13 @@
        <widget class="QPushButton" name="pushButton_StopModel">
         <property name="minimumSize">
          <size>
-          <width>180</width>
+          <width>300</width>
           <height>0</height>
          </size>
         </property>
         <property name="maximumSize">
          <size>
-          <width>180</width>
+          <width>300</width>
           <height>16777215</height>
          </size>
         </property>
@@ -140,9 +164,15 @@
      <layout class="QHBoxLayout" name="horizontalLayout_5">
       <item>
        <widget class="QLabel" name="label_FinalReport">
+        <property name="minimumSize">
+         <size>
+          <width>200</width>
+          <height>0</height>
+         </size>
+        </property>
         <property name="maximumSize">
          <size>
-          <width>90</width>
+          <width>16777215</width>
           <height>16777215</height>
          </size>
         </property>
@@ -256,7 +286,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>800</width>
+     <width>1024</width>
      <height>22</height>
     </rect>
    </property>

@@ -70,9 +70,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.pushButton_StopModel.setEnabled(False)
         self.pushButton_StopModel.clicked.connect(self.stop_model)
 
-        self.tableWidget_Results.setColumnWidth(0, 500)
-        self.tableWidget_Results.setColumnWidth(1, 100)
-        self.tableWidget_Results.setColumnWidth(2, 100)
+        self.tableWidget_Results.setColumnWidth(0, 600)
+        self.tableWidget_Results.setColumnWidth(1, 150)
+        self.tableWidget_Results.setColumnWidth(2, 150)
         self.tableWidget_Results.setEditTriggers(
             QAbstractItemView.NoEditTriggers
         )
