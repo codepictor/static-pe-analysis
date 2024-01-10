@@ -13,22 +13,25 @@ Clone the repository:
 
 Create a new virtual environment:
 
-    <path to python3.6> -m venv venv
+    <your python3.6> -m venv venv
 
 Activate the environment:
 
-    # on Linux:
+    # Linux:
     source venv/bin/activate
-    # on Windows:
+    # Windows:
     call venv\Scripts\activate.bat
 
 Install required dependencies:
 
-    # on Linux:
+    # Linux:
     pip install --upgrade pip -r requirements.txt
-    # on Windows:
+    # Windows:
     python -m pip install --upgrade pip -r requirements.txt
 
-Finally, run *main.py*:
+Finally, run the following:
 
+    # GUI
     python src/main/python/main.py
+    # CLI
+    python src/main/python/cli_main.py <path to a PE file or a directory>
