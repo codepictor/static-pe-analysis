@@ -196,7 +196,7 @@ def get_paths_to_pe_files(path):
         path (str): path to a single PE file
                     or a directory containing PE files
     Returns:
-        list: paths to PE files
+        generator: paths to PE files
     """
     if os.path.isfile(path) and pe_utils.is_pe_file(path):
         yield path
@@ -214,14 +214,14 @@ def get_prepared_data(path_to_pe_file):
     """Returns features of the given PE file.
 
     Returns a dataframe which the classifier needs
-    as the first return value and some additional features
+    as the first return value and raw features
     as the second return value.
 
     Args:
         path_to_pe_file (str): path to a PE file
     Returns:
         pandas.DataFrame: prepared data for the classifier
-        dict: all raw features
+        dict: raw features
     """
     pe = pefile.PE(path_to_pe_file)
 
@@ -250,7 +250,7 @@ def get_prediction(path_to_pe_file, classifier):
         path_to_pe_file (str): path to a PE file
         classifier: classifier for making predictions
     Returns:
-        prediction (dict): path to a PE-file (str)
+        prediction (dict): path to a PE file (str)
                            predicted label (bool),
                            decision function value (float),
                            note (str)
