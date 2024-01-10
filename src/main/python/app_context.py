@@ -1,5 +1,3 @@
-# from pathlib import Path
-
 from PySide2.QtGui import QIcon
 from sklearn.externals import joblib
 from fbs_runtime.application_context.PySide2 import ApplicationContext

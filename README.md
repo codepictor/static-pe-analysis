@@ -24,8 +24,11 @@ Activate the environment:
 
 Install required dependencies:
 
+    # on Linux:
     pip install --upgrade pip -r requirements.txt
+    # on Windows:
+    python -m pip install --upgrade pip -r requirements.txt
 
-Finally, run the following:
+Finally, run *main.py*:
 
-    fbs run
+    python src/main/python/main.py

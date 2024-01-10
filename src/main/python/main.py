@@ -1,12 +1,12 @@
 import sys
 
-from PySide2 import QtCore
+# from PySide2 import QtCore
 
 from app_context import AppContext
 
 
 def main():
-    QtCore.QCoreApplication.setAttribute(QtCore.Qt.AA_ShareOpenGLContexts)
+    # QtCore.QCoreApplication.setAttribute(QtCore.Qt.AA_ShareOpenGLContexts)
 
     appctxt = AppContext()
     exit_code = appctxt.run()
