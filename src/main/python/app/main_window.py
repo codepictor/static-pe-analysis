@@ -84,7 +84,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # self.tableWidget_Results.setHorizontalHeader(header_view)
 
         self.statusbar.showMessage(
-            'Choose a PE-file or a directory containing PE-files...'
+            'Choose a PE file or a directory containing PE files...'
         )
 
         # self.pushButton_RandomNumber.clicked.connect(
@@ -115,7 +115,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 QMessageBox.about(
                     self,
                     'Information',
-                    'The selected file is not recognized as PE-file.'
+                    'The selected file is not recognized as PE file.'
                 )
         self.cancel_run()
 
@@ -396,14 +396,14 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         msg += (
             'This tool is designed to search for potentially malicious '
-            'code inside PE-files (now only .exe is supported) '
+            'code inside PE files (now only .exe is supported) '
             'with the help of static ML analysis. '
             'The word "static" means that these files are not run, '
-            'so the code inside these PE-files will not be executed. '
-            'Instead, a PE-file is parsed, '
+            'so the code inside these PE files will not be executed. '
+            'Instead, a PE file is parsed, '
             'and some features are extracted from its layout. '
             'These features are fed to the machine learning model to get '
-            'a score for this PE-file. '
+            'a score for this PE file. '
             'If the score is negative, a file is considered to be safe. '
             'The higher this score, the more dangerous the file is.\n\n'
         )

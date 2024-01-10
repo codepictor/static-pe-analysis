@@ -190,7 +190,7 @@ def get_paths_to_pe_files(path):
 
     This function is auxiliary. It detects whether given path is a path
     to a single PE file or a directory with a lot of PE files
-    (or maybe with subdirectories containing PE files).
+    (maybe with subdirectories containing PE files).
 
     Args:
         path (str): path to a single PE file
@@ -268,7 +268,9 @@ def get_prediction(path_to_pe_file, classifier):
         }
 
     score = classifier.decision_function(input_df)[0]
+    score = score - 10.0  # decreasing the number of false positives
     # proba = classifier.predict_proba(input_df)[0, 1]
+
     return {
         'path_to_file': path_to_pe_file,
         'label': True if score >= 0.0 else False,
